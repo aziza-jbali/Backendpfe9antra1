@@ -1,28 +1,35 @@
-var createError = require('http-errors');
-var express = require('express');
+var createError = require('http-errors');//
+var express = require('express');//imprtation mta3 el mo5
 var path = require('path');
-var cookieParser = require('cookie-parser');
+var cookieParser = require('cookie-parser');//el site mta3ik ysajel 7ajet 3lik
 var logger = require('morgan');
-
+// madem fas5na 7ajet lazem nsal7o fi app.js 
+//+zdna hadha
+const http=require("http")
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-
+//7mlna instance mt3 express express server 7adher bach noredh mino kol chy bach njem nsna3 el server mta3i
+//app how mo5 ey 7aja lazem nrboth bl app.js bach ttkra aka el 7aja mil app wala erbot 7aja marbota bl app.js
+require("dotenv").config();
+const {connectToMongoDB}=require("./config/db.js");//importation
 var app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+// app.set('views', path.join(__dirname, 'views'));
+// app.set('view engine', 'jade');
 
-app.use(logger('dev'));
+app.use(logger('dev'));// ya express esta3mel hadha
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// lhna 3ibra 3la guichet wala map t7eeb tmichi page user 3lik bl path hadha
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
+//hadha mta3 el error 
 app.use(function(req, res, next) {
   next(createError(404));
 });
@@ -35,7 +42,22 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.json('error');
 });
-
+//res.render('error'); res.json
 module.exports = app;
+const server=http.createServer(app);
+server.listen(process.env.Port,()=>{
+  console.log("server is runing on port 5011");
+  connectToMongoDB();
+
+})
+//Ce code crée un serveur Node.js basé sur une application Express (app).
+//Il commence à écouter les requêtes sur le port 3010,
+//et lorsqu’il démarre avec succès, il affiche dans la console :
+
+//"server is running on port 3010"
+
+
+// Mugprt4syrbWYoAI
+// mongodb+srv://<azizajbali5n_db_user>:<Mugprt4syrbWYoAI>@cluster0.cbtdjol.mongodb.net/
