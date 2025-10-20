@@ -74,6 +74,55 @@ module.exports.createAdminprincipal = async (req, res) => {
 };
 
 
+//---------------------Create agence---------------
+module.exports.createagence = async (req, res) => {
+  try {
+    const { nom, prenom, email, password,   } = req.body;
+    const role = "agence";
+
+    const newUser = new userModel({
+      nom,
+      prenom,
+      email,
+      password,
+      role,
+    // vehicules: [{ type: mongoose.Schema.Types.ObjectId, ref: 'vehicules' }],
+     // فارغ عند الإنشاء
+
+    });
+
+    await newUser.save();
+
+    res.status(201).json({
+      newUser,
+      message: "agence created successfully",
+    });
+
+  } catch (error) {
+    console.error(error); // يظهر كامل التفاصيل في الترمينال
+
+    // Validation errors من Mongoose
+    if (error.name === "ValidationError") {
+      const messages = Object.values(error.errors).map(val => val.message);
+      return res.status(400).json({ message: "Validation Error", errors: messages });
+    }
+
+    // Duplicate key error من MongoDB
+    if (error.code === 11000) {
+      return res.status(400).json({
+        message: "Duplicate field value entered",
+        key: error.keyValue,
+      });
+    }
+
+    // أي خطأ آخر
+    res.status(500).json({
+      message: "Server Error",
+      error: error.message,
+      stack: error.stack
+    });
+  }
+};
 
 
 

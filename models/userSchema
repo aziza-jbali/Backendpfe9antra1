@@ -68,10 +68,10 @@ const userSchema = new mongoose.Schema({
     enum: ['adminprincipal', 'agence', 'announceur', 'client'], 
     default: 'client' 
   },
-
+  // 📞 معلومات إضافية (لما يكمل الملف الشخصي)
   phones: [{ type: String }],
   address: { type: String },
-  
+  description: { type: String },
   // pour admin
   adminCode: { type: String },
 
@@ -85,7 +85,7 @@ const userSchema = new mongoose.Schema({
   reservations: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Reservation' }],
 
   image: { type: String, default: 'default-user.png' },
-  status: { type: String, enum: ['active','inactive','banned'], default: 'inactive' }
+  // status: { type: String, enum: ['active','inactive','banned'], default: 'inactive' }
 
 }, { timestamps: true });
 
