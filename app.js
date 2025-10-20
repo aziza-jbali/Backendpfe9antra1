@@ -7,7 +7,7 @@ var logger = require('morgan');
 //+zdna hadha
 const http=require("http")
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var usersRouter = require('./routes/UsersRouter.js');
 //7mlna instance mt3 express express server 7adher bach noredh mino kol chy bach njem nsna3 el server mta3i
 //app how mo5 ey 7aja lazem nrboth bl app.js bach ttkra aka el 7aja mil app wala erbot 7aja marbota bl app.js
 require("dotenv").config();
@@ -22,7 +22,7 @@ app.use(logger('dev'));// ya express esta3mel hadha
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));//dosssier static tkolo rak bach tsta3mlo makench myfikich
 
 // lhna 3ibra 3la guichet wala map t7eeb tmichi page user 3lik bl path hadha
 app.use('/', indexRouter);

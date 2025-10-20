@@ -1,0 +1,123 @@
+// const mongoose = require('mongoose');
+// const bcrypt = require('bcryptjs');
+
+// // -------------------- User Schema --------------------
+// const userSchema = new mongoose.Schema({
+//   name: { type: String, trim: true },
+//   email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+//   password: { type: String }, // مخزن كهاش
+//   role: { type: String, enum: ['adminprincipal', 'agence', 'announceur', 'client'], default: 'client' },
+//   phones: [{ type: String }],
+//   address: { type: String },
+//   //pour admin
+//   adminCode: { type: String }, // فقط للمسؤولين
+//   // pour agence
+//   vehicules: [{ type: mongoose.Schema.Types.ObjectId, ref: 'vehicules' }],
+//   // pour announceur
+//   annonces: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Annonce' }],
+//   // pour client
+//   reservations: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Reservation' }],
+//   image: { type: String, default: 'default-user.png' },
+//   status: { type: String, enum: ['active','inactive','banned'], default: 'inactive' }
+// }, { timestamps: true });//yjin wakth el model hadha tsna3 wala sartlo update
+
+
+
+
+// userSchema.post('save', function(doc, next) {
+//     console.log('New user created: ', doc);
+//     next();
+// });
+
+// const User = mongoose.model('User', userSchema);
+// module.exports = User;
+
+
+
+
+const mongoose = require('mongoose');
+ const bcrypt = require('bcryptjs');
+
+// -------------------- User Schema --------------------
+const userSchema = new mongoose.Schema({
+  nom: { type: String, trim: true },
+    prenom: { type: String, trim: true },
+
+  
+  email: { 
+    type: String, 
+    required: true, 
+    unique: true, 
+    lowercase: true, 
+    trim: true, 
+    match: [/@/, 'Please fill a valid email address'] // validation مثل الأول
+  },
+  
+  password: { 
+    type: String, 
+    required: true,
+    minlength: 6,
+    match: [
+      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/, 
+      'Password must contain at least one uppercase letter, one lowercase letter, and one digit.'
+    ]
+  },
+
+  role: { 
+    type: String, 
+    enum: ['adminprincipal', 'agence', 'announceur', 'client'], 
+    default: 'client' 
+  },
+
+  phones: [{ type: String }],
+  address: { type: String },
+  
+  // pour admin
+  adminCode: { type: String },
+
+  // pour agence
+  vehicules: [{ type: mongoose.Schema.Types.ObjectId, ref: 'vehicules' }],
+
+  // pour annonceur
+  annonces: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Annonce' }],
+
+  // pour client
+  reservations: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Reservation' }],
+
+  image: { type: String, default: 'default-user.png' },
+  status: { type: String, enum: ['active','inactive','banned'], default: 'inactive' }
+
+}, { timestamps: true });
+
+userSchema.pre('save', async function (next) {
+  // فقط نعمل hash إذا كانت كلمة السر جديدة أو معدّلة
+  if (!this.isModified('password')) return next();
+
+  try {
+    const salt = await bcrypt.genSalt(10); // توليد salt
+    this.password = await bcrypt.hash(this.password, salt); // تشفير كلمة السر
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+
+// 🔸 دالة لمقارنة كلمة السر عند تسجيل الدخول
+userSchema.methods.comparePassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+
+
+
+
+
+
+
+// Post-save hook
+// userSchema.post('save', function(doc, next) {
+//     console.log('New user created: ', doc);
+//     next();
+// });
+
+const User = mongoose.model('User', userSchema);
+module.exports = User;
