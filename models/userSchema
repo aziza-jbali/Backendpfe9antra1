@@ -65,7 +65,7 @@ const userSchema = new mongoose.Schema({
 
   role: { 
     type: String, 
-    enum: ['adminprincipal', 'agence', 'announceur', 'client'], 
+    enum: ['adminprincipal', 'agence', 'annonceur', 'client'], 
     default: 'client' 
   },
   // 📞 معلومات إضافية (لما يكمل الملف الشخصي)
