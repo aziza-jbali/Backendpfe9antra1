@@ -1,7 +1,6 @@
 const multer = require("multer");
 const path = require('path');
 const fs = require('fs');
-const userModel = require('../models/userSchema');
 
 //------------------- إعداد multer -------------------
 const storage = multer.diskStorage({
@@ -27,4 +26,4 @@ const storage = multer.diskStorage({
 });
 
 const uploadfile = multer({ storage: storage });
-module.exports.uploadfile = uploadfile;
+module.exports = uploadfile;
