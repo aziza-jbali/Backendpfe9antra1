@@ -27,6 +27,15 @@ router.put(
   uploadfile.single("image"), // إذا فيه صورة جديدة
   VehiculesController.updateVehicule
 );
+//update the statu by admin
+
+
+
+router.put("/update-statutadminprincipal/:id", VehiculesController.updateStatutByAdmin);
+
+//update the statu by agence
+router.put("/update-statusagence/:id", VehiculesController.updateStatusVehiculeByAgence);
+
 
 
 

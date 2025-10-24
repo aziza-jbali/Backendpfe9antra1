@@ -193,6 +193,101 @@ exports.updateVehicule = async (req, res) => {
 };
 
 
+// changer le statu par l admin
+// ✅ admin فقط يمكنه تحديث statut (En attente / Approuvé / Rejeté)
+exports.updateStatutByAdmin = async (req, res) => {
+  try {
+    const { id } = req.params; // id السيارة
+    const { statut, adminId } = req.body; // id المشرف المرسل
+
+    // 🔹 نتحقق أن المشرف موجود
+    // const admin = await userModel.findById(adminId);
+    // if (!admin) return res.status(404).json({ message: "Admin not found" });
+    // if (admin.role !== "admin") {
+    //   return res.status(403).json({ message: "Accès refusé. Pas autorisé." });
+    // }
+
+    // 🔹 نتحقق أن الحالة صحيحة (من enum)
+    const allowedStatus = ["En attente", "Approuvé", "Rejeté"];
+    if (!allowedStatus.includes(statut)) {
+      return res.status(400).json({ message: "Statut invalide" });
+    }
+
+    // 🔹 نحدث السيارة
+    const vehicule = await Vehicule.findByIdAndUpdate(
+      id,
+      { statut },
+      { new: true }
+    );
+
+    if (!vehicule) {
+      return res.status(404).json({ message: "Véhicule introuvable" });
+    }
+
+    res.status(200).json({
+      message: "Statut mis à jour avec succès ✅",
+      vehicule
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+
+
+
+// ✅ الوكالة فقط يمكنها تحديث statusVehicule (diponible / indisponible)
+exports.updateStatusVehiculeByAgence = async (req, res) => {
+  try {
+    const { id } = req.params; // id السيارة
+    const { statusVehicule, agenceId } = req.body; // الحالة الجديدة و id الوكالة
+
+    // 🔹 تحقق أن الحالة ضمن القيم المسموح بها
+    const allowed = ["diponible", "indisponible"];
+    if (!allowed.includes(statusVehicule)) {
+      return res.status(400).json({ message: "Statut de disponibilité invalide" });
+    }
+
+    // 🔹 تحقق أن الوكالة موجودة (يمكن تفعيل لاحقًا)
+    // const agence = await userModel.findById(agenceId);
+    // if (!agence) return res.status(404).json({ message: "Agence non trouvée" });
+    // if (agence.role !== "agence") {
+    //   return res.status(403).json({ message: "Accès refusé. Pas autorisé." });
+    // }
+
+    // 🔹 تحقق أن السيارة فعلاً تابعة لهذه الوكالة (يمكن تفعيل لاحقًا)
+    // const vehicule = await Vehicule.findOneAndUpdate(
+    //   { _id: id, idagencedevehicule: agenceId },
+    //   { statusVehicule },
+    //   { new: true }
+    // );
+
+    // 🔹 تحديث السيارة مباشرة بدون تحقق (للتجربة الآن)
+    const vehicule = await Vehicule.findByIdAndUpdate(
+      id,
+      { statusVehicule },
+      { new: true }
+    );
+
+    if (!vehicule) {
+      return res.status(404).json({ message: "Véhicule introuvable" });
+    }
+
+    res.status(200).json({
+      message: "✅ Statut de disponibilité mis à jour avec succès",
+      vehicule
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+
+
 
 
 
