@@ -4,6 +4,7 @@ const VehiculesController=require("../controllers/VehiculesController")
 const uploadfile = require('../middlewares/uploadfile');
 
 
+router.post('/addVehicule/:id', uploadfile.single('image'),VehiculesController.addVehicule);
 
 
 

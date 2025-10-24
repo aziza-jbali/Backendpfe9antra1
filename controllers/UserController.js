@@ -1,29 +1,10 @@
-//UserController bach n7oto les function eli bach ntbakhom 3al model
+//UserController bach n7oto les functions eli bach ntbakhom 3al model
 
 const userModel = require("../models/userSchema");// first 7aja importation mta3 model
 
 // Get all users , add user , search user,delete user , update user
 
-//2 Create a new user
-// module.exports.createAdminprincipal = async (req, res) => {
-//   try {
-//     // logique
-//     const { nom, prenom, email, password, adminCode } = req.body;
-//     const role = "adminprincipal";
-//     const newUser = new userModel({
-//       nom,
-//       prenom,
-//       email,
-//       password,
-//       role,
-//       adminCode,
-//     });
-//     await newUser.save();
-//     res.status(201).json({ newUser, message: "User created successfully" });
-//   } catch (error) {
-//     res.status(500).json({ message: "Server error", error });
-//   }
-// };
+
 
 // -------------------- Create Admin Principal --------------------
 module.exports.createAdminprincipal = async (req, res) => {
@@ -351,18 +332,6 @@ module.exports.createClientWithImg = async (req, res) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 // 1 get all user 
 
 
@@ -436,30 +405,58 @@ module.exports.getUserById = async (req, res) => {
 };
 
 
-//search user 
+//search user  by id email ou nom
 
+
+// module.exports.searchUsers = async (req, res) => {
+//   try {
+//     const { query } = req.body; // نص البحث الذي يدخله المستخدم
+//     if (!query) {
+//       return res.status(400).json({ message: "Please provide a search query" });
+//     }
+// // chercher par email id ou nom
+//     const users = await userModel.find({
+//       $or: [
+//         { nom: { $regex: query, $options: "i" } },
+//         { email: { $regex: query, $options: "i" } },
+//         { _id: query } // إذا أدخل المستخدم الـ ID كامل
+//       ]
+//     }).select("-password");
+
+//     res.status(200).json(users);
+//   } catch (error) {
+//     res.status(500).json({ message: "Server error", error });
+//   }
+// };
+const mongoose = require("mongoose");
 
 module.exports.searchUsers = async (req, res) => {
   try {
-    const { query } = req.body; // نص البحث الذي يدخله المستخدم
+    const { query } = req.body;
     if (!query) {
       return res.status(400).json({ message: "Please provide a search query" });
     }
 
-    // البحث عن اسم، ايميل، أو ID
-    const users = await userModel.find({
-      $or: [
-        { nom: { $regex: query, $options: "i" } },
-        { email: { $regex: query, $options: "i" } },
-        { _id: query } // إذا أدخل المستخدم الـ ID كامل
-      ]
-    }).select("-password");
+    const searchConditions = [
+      { nom: { $regex: query, $options: "i" } },
+      { email: { $regex: query, $options: "i" } }
+    ];
+
+    // إضافة البحث بالـ _id فقط إذا كانت قيمة query صالحة
+    if (mongoose.Types.ObjectId.isValid(query)) {
+      searchConditions.push({ _id: query });
+    }
+
+    const users = await userModel.find({ $or: searchConditions }).select("-password");
 
     res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
 };
+
+
+
 //delete user by id 
 module.exports.deleteUserById = async (req, res) => {
   try {

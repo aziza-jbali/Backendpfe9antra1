@@ -101,8 +101,7 @@ userSchema.pre('save', async function (next) {
     next(err);
   }
 });
-
-// 🔸 دالة لمقارنة كلمة السر عند تسجيل الدخول
+// 🔸 Fonction pour comparer le mot de passe lors de la connexion
 userSchema.methods.comparePassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
