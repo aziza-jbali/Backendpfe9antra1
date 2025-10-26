@@ -11,5 +11,15 @@ router.get('/getAllAnnonces', AnnonceController.getAnnonces);
 router.get('/getoneannonce/:id', AnnonceController.getAnnonceById);
 // delete by id 
 router.delete('/deleteannonce/:id', AnnonceController.deleteAnnonce);
+// update annonce by id 
+
+router.put(
+  "/updateAnnonce/:id",
+  uploadfile.single("image"), // تحميل صورة جديدة إن وجدت
+  AnnonceController.updateAnnonce
+);
+
+
+
 
 module.exports = router;

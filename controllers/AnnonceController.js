@@ -86,6 +86,58 @@ exports.deleteAnnonce = async (req, res) => {
     res.status(500).json({ message: "Erreur du serveur", error: error.message });
   }
 };
+//update annonce by id 
+
+exports.updateAnnonce = async (req, res) => {
+  try {
+    const annonceId = req.params.id; // ID de l'annonce
+    const data = req.body; // nouvelles données
+
+    // 1️⃣ التحقق أن الإعلان موجود
+    const annonce = await Annonce.findById(annonceId);
+    if (!annonce) {
+      return res.status(404).json({ message: "🚫 Annonce not found" });
+    }
+
+    // 2️⃣ التحقق أن المعلِن المرتبط موجود
+    const announcer = await User.findById(annonce.idannouncer);
+    if (!announcer) {
+      return res.status(404).json({ message: "🚫 Announcer not found" });
+    }
+
+    // 3️⃣ التحقق أن الدور هو معلِن (announcer)
+    if (announcer.role !== "annonceur") {
+      return res.status(403).json({ message: "🚫 User is not an announcer" });
+    }
+
+    // 4️⃣ إذا تم رفع صورة جديدة
+    if (req.file) {
+      data.image = `/uploads/annonces/${req.file.filename}`;
+    }
+
+    // 5️⃣ تحديث بيانات الإعلان
+    const updatedAnnonce = await Annonce.findByIdAndUpdate(annonceId, data, {
+      new: true, // لإرجاع البيانات بعد التحديث
+    });
+
+    res.status(200).json({
+      message: "✅ Annonce updated successfully",
+      annonce: updatedAnnonce,
+    });
+  } catch (error) {
+    console.error("❌ Error updating annonce:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+
+
+
+
+
+
+
+
 
 
 
