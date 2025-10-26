@@ -1,11 +1,7 @@
 const mongoose = require('mongoose');
 
 const AnnonceSchema = new mongoose.Schema({
-  idannounce: {
-    type: String,
-    required: true,
-    unique: true
-  },
+ 
   idannouncer: {
     type: mongoose.Schema.Types.ObjectId, // رابط لمعلِن (User مثلاً)
     ref: 'User',
@@ -19,6 +15,10 @@ const AnnonceSchema = new mongoose.Schema({
     type: String, 
     enum: ['En attente', 'Approuvé', 'Rejeté'], 
     default: 'En attente' 
+  },
+    image: {            // حقل الصورة
+    type: String,
+    default: null     // يمكن أن يكون فارغ إذا لم يتم رفع صورة
   },
   datePublication: {
     type: Date,
