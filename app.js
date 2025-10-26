@@ -10,6 +10,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/UsersRouter.js');
 var VehiculesRouter=require('./routes/VehiculesRouter.js')
 var ReservationRouter=require('./routes/ReservationRouter.js')
+var AnnoncesRouter=require('./routes/AnnonceRouter.js')
 //7mlna instance mt3 express express server 7adher bach noredh mino kol chy bach njem nsna3 el server mta3i
 //app how mo5 ey 7aja lazem nrboth bl app.js bach ttkra aka el 7aja mil app wala erbot 7aja marbota bl app.js
 require("dotenv").config();
@@ -31,6 +32,8 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);// we relaited all router of user with the brain app.js
 app.use('/Vehicules', VehiculesRouter)
 app.use('/Reservation',ReservationRouter )
+app.use('/Annonces',AnnoncesRouter )
+
 
 // catch 404 and forward to error handler
 //hadha mta3 el error 
