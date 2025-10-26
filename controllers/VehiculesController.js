@@ -290,7 +290,21 @@ exports.updateStatusVehiculeByAgence = async (req, res) => {
 
 
 
+// ✅ جلب سيارة واحدة حسب ID
+exports.getVehiculeById = async (req, res) => {
+  try {
+    const { id } = req.params; // نجيبو الـ ID من الرابط
+    const vehicule = await Vehicule.findById(id);
 
+    if (!vehicule) {
+      return res.status(404).json({ message: "Véhicule non trouvé" });
+    }
+
+    res.status(200).json(vehicule);
+  } catch (error) {
+    res.status(500).json({ message: "Erreur lors de la récupération du véhicule", error });
+  }
+};
 
 
 

@@ -51,7 +51,12 @@ const vehiculeSchema = new mongoose.Schema({
   avecChauffeur: { type: Boolean, default: false },
 
   // ✅ تاريخ الإضافة
-  dateAjout: { type: Date, default: Date.now }
+  dateAjout: { type: Date, default: Date.now },
+    // ✅ 🔗 العلاقة مع الـ Reservations
+  reservations: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Reservation'
+  }]
 
 }, { timestamps: true });
 

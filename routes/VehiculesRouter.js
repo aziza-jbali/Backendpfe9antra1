@@ -12,8 +12,8 @@ router.post('/addVehicule/:id', uploadfile.single('image'),VehiculesController.a
 
 router.get('/getVehicules', VehiculesController.getVehicules);
 
-
-
+//get vehicule by id
+router.get("/getvehiculesbyid/:id", VehiculesController.getVehiculeById);
 
 
 
