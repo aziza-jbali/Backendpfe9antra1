@@ -12,14 +12,18 @@ router.get('/getoneannonce/:id', AnnonceController.getAnnonceById);
 // delete by id 
 router.delete('/deleteannonce/:id', AnnonceController.deleteAnnonce);
 // update annonce by id 
-
 router.put(
   "/updateAnnonce/:id",
   uploadfile.single("image"), // تحميل صورة جديدة إن وجدت
   AnnonceController.updateAnnonce
 );
-
-
+// update statut
+router.put(
+  "/updateStatut/:id",
+  AnnonceController.updateStatutByAnnonceur
+);
+// get all the annonces with the details of annonceur 
+router.get("/annonceur/:annonceurId/annonces", AnnonceController.getAnnoncesOfAnnonceur);
 
 
 module.exports = router;

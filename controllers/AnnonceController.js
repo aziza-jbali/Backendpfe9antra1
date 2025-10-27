@@ -129,8 +129,71 @@ exports.updateAnnonce = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+// update the statue
+exports.updateStatutByAnnonceur = async (req, res) => {
+  try {
+    const { id } = req.params; // 🆔 رقم الإعلان
+    const { statut, annonceurId } = req.body; // id المعلن المرسل
 
+    // 🔹 التحقق أن المعلن موجود
+    // const annonceur = await User.findById(annonceurId);
+    // if (!annonceur) return res.status(404).json({ message: "Annonceur non trouvé" });
 
+    // if (annonceur.role !== "annonceur") {
+    //   return res.status(403).json({ message: "🚫 المستخدم ليس معلنًا" });
+    // }
+
+    // 🔹 التحقق أن الحالة صحيحة
+    const allowedStatus = ["En attente", "Approuvé", "Rejeté"];
+    if (!allowedStatus.includes(statut)) {
+      return res.status(400).json({ message: "Statut invalide" });
+    }
+
+    // 🔹 تحديث الإعلان مع التأكد أنه تابع لهذا المعلن
+    const annonce = await Annonce.findOneAndUpdate(
+      { _id: id, idannouncer: annonceurId },
+      { statut },
+      { new: true }
+    );
+
+    if (!annonce) {
+      return res.status(404).json({ message: "Annonce introuvable ou pas autorisé" });
+    }
+
+    res.status(200).json({
+      message: "Statut de l'annonce mis à jour avec succès ✅",
+      annonce
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// get annonce with the details of annonceur
+exports.getAnnoncesOfAnnonceur = async (req, res) => {
+  try {
+    const { annonceurId } = req.params;
+
+    const annonceur = await User.findById(annonceurId)
+      .select("nom prenom email role image")
+      .populate({
+        path: "annonces",          // الحقل array في User
+        select: "description statut image datePublication"
+      });
+
+    if (!annonceur) {
+      return res.status(404).json({ message: "Annonceur non trouvé" });
+    }
+
+    res.status(200).json({
+      message: "✅ Annonces récupérées avec succès",
+      annonceur
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 
 
