@@ -4,9 +4,11 @@ const VehiculesController=require("../controllers/VehiculesController")
 const uploadfile = require('../middlewares/uploadfile');
 
 //add vehicule by image and relited it by its agence 
+//fi login tst7akha
 router.post('/addVehicule/:id', uploadfile.single('image'),VehiculesController.addVehicule);
 
-
+// add without login
+// router.post('/addVehicule', uploadfile.single('image'), VehiculesController.addVehicule);
 
 //get all véhicules
 

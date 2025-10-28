@@ -40,7 +40,7 @@ const userModel = require("../models/userSchema")
 
 
 
-
+// hadi el 2 fi add 
 // exports.addVehicule = async (req, res) => {
 //   try {
 //     const agenceId = req.params.id;
@@ -79,37 +79,89 @@ const userModel = require("../models/userSchema")
 
 
 
+/// hadi el add tst7akha fi login hadi 3
+// exports.addVehicule = async (req, res) => {
+//   try {
+//     const agenceId = req.params.id;
+//     const data = req.body;
 
+//     // التأكد أن الوكالة موجودة
+//     const agence = await userModel.findById(agenceId);
+//     if (!agence) {
+//       return res.status(404).json({ message: "Agence not found" });
+//     }
+
+//     // التأكد أن الدور هو "agence"
+//     if (agence.role !== "agence") {
+//       return res.status(403).json({ message: "Seul les agences peuvent ajouter des véhicules" });
+//     }
+
+//     // إضافة الصورة إذا موجودة
+//     if (req.file) {
+//       data.image = `/uploads/vehicules/${req.file.filename}`;
+//     }
+
+//     data.idagencedevehicule = agenceId;
+
+//     // إنشاء السيارة
+//     const newVehicule = new Vehicule(data);
+//     await newVehicule.save();
+
+//     // إضافة السيارة للوكالة
+//     agence.vehicules.push(newVehicule._id);
+//     await agence.save();
+
+//     res.status(201).json({
+//       message: "🚗 Véhicule ajouté avec succès",
+//       vehicule: newVehicule
+//     });
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
+// hadhi add ntstha blach login el 1 min 8ir id
+// exports.addVehicule = async (req, res) => {
+//   try {
+//     const data = req.body;
+
+//     // 🔹 لو فيها صورة نضيف المسار
+//     if (req.file) {
+//       data.image = `/uploads/vehicules/${req.file.filename}`;
+//     }
+
+//     // 🔹 إنشاء السيارة مباشرة
+//     const newVehicule = new Vehicule(data);
+//     await newVehicule.save();
+
+//     res.status(201).json({
+//       message: "🚗 Véhicule ajouté avec succès (sans agence pour le moment)",
+//       vehicule: newVehicule
+//     });
+
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
+/// hadhi nhar 10/27/2025
 exports.addVehicule = async (req, res) => {
   try {
     const agenceId = req.params.id;
     const data = req.body;
 
-    // التأكد أن الوكالة موجودة
-    const agence = await userModel.findById(agenceId);
-    if (!agence) {
-      return res.status(404).json({ message: "Agence not found" });
-    }
-
-    // التأكد أن الدور هو "agence"
-    if (agence.role !== "agence") {
-      return res.status(403).json({ message: "Seul les agences peuvent ajouter des véhicules" });
-    }
-
-    // إضافة الصورة إذا موجودة
     if (req.file) {
       data.image = `/uploads/vehicules/${req.file.filename}`;
     }
 
     data.idagencedevehicule = agenceId;
 
-    // إنشاء السيارة
     const newVehicule = new Vehicule(data);
     await newVehicule.save();
 
-    // إضافة السيارة للوكالة
-    agence.vehicules.push(newVehicule._id);
-    await agence.save();
+    await userModel.findByIdAndUpdate(
+      agenceId,
+      { $push: { vehicules: newVehicule._id } },
+      { new: true }
+    );
 
     res.status(201).json({
       message: "🚗 Véhicule ajouté avec succès",
@@ -119,6 +171,10 @@ exports.addVehicule = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+
+
 
 
 

@@ -3,6 +3,8 @@ var express = require('express');//imprtation mta3 el mo5
 var path = require('path');
 var cookieParser = require('cookie-parser');//el site mta3ik ysajel 7ajet 3lik
 var logger = require('morgan');
+var cors = require('cors'); // ✅ أضف هذا السطر
+
 // madem fas5na 7ajet lazem nsal7o fi app.js 
 //+zdna hadha
 const http=require("http")
@@ -20,7 +22,7 @@ var app = express();
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'jade');
-
+app.use(cors());
 app.use(logger('dev'));// ya express esta3mel hadha
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
