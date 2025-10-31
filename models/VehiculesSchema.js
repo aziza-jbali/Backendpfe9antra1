@@ -40,8 +40,8 @@ const vehiculeSchema = new mongoose.Schema({
   // ✅ disponibilité (disponible ou non)
   statusVehicule: { 
     type: String, 
-    enum: ['diponible', 'indisponible'], 
-    default: 'diponible' 
+    enum: ['disponible', 'indisponible'], 
+    default: 'disponible' 
   },
 
   // ✅ السعر

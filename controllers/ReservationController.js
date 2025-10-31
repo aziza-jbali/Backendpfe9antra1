@@ -47,7 +47,7 @@ exports.ajouterReservation = async (req, res) => {
     // ✅ إضافة الحجز إلى السيارة + تغيير حالتها إلى غير متاحة
     await Vehicule.findByIdAndUpdate(idVehicule, {
       $push: { reservations: newReservation._id },
-      statusVehicule: "indisponible"
+      // statusVehicule: "indisponible"
     });
 
     res.status(201).json({

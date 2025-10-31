@@ -147,9 +147,15 @@ exports.addVehicule = async (req, res) => {
   try {
     const agenceId = req.params.id;
     const data = req.body;
+     console.log("req.body:", req.body);
+    console.log("req.file:", req.file);
+    console.log("agenceId:", req.params.id);
+   
 
     if (req.file) {
-      data.image = `/uploads/vehicules/${req.file.filename}`;
+      // data.image = `/uploads/vehicules/${req.file.filename}`;
+      data.image = `/images/${req.file.filename}`;
+
     }
 
     data.idagencedevehicule = agenceId;
@@ -301,7 +307,7 @@ exports.updateStatusVehiculeByAgence = async (req, res) => {
     const { statusVehicule, agenceId } = req.body; // الحالة الجديدة و id الوكالة
 
     // 🔹 تحقق أن الحالة ضمن القيم المسموح بها
-    const allowed = ["diponible", "indisponible"];
+    const allowed = ["disponible", "indisponible"];
     if (!allowed.includes(statusVehicule)) {
       return res.status(400).json({ message: "Statut de disponibilité invalide" });
     }
@@ -361,6 +367,38 @@ exports.getVehiculeById = async (req, res) => {
     res.status(500).json({ message: "Erreur lors de la récupération du véhicule", error });
   }
 };
+
+
+// model Vehicle: فيه مجمل الحقول و الحقل المرجعي
+// مثلا: idagencedevehicule: { type: mongoose.Schema.Types.ObjectId, ref: 'Agence' }
+
+// app.get('/api/vehicules-with-agence', async (req, res) => {
+//   try {
+//     const vehicules = await Vehicle.find()
+//       .populate('idagencedevehicule', 'nom email'); // اختار الحقول اللي تريد ترجعها
+//     // IMPORTANT: لا ترجع motDePasse أبداً من الباكند!
+//     res.json(vehicules);
+//   } catch (err) {
+//     res.status(500).json({ message: 'Erreur serveur', error: err });
+//   }
+// });
+
+exports.getvehiculeswithagence = async (req, res) => {
+   try {
+    const vehicules = await Vehicule.find()
+       .populate('idagencedevehicule', 'nom email phones image'); // اختار الحقول اللي تريد ترجعها
+    // IMPORTANT: لا ترجع motDePasse أبداً من الباكند!
+     res.json(vehicules);
+   } catch (err) {
+     res.status(500).json({ message: 'Erreur serveur', error: err });
+   }
+};
+
+
+
+
+
+
 
 
 

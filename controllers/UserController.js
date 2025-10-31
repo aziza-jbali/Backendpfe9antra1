@@ -162,7 +162,7 @@ module.exports.createannonceur = async (req, res) => {
 //---------------------Create client---------------
 module.exports.createclient = async (req, res) => {
   try {
-    const { nom, prenom, email, password,   } = req.body;
+    const { nom, prenom, email, password, phones, address  } = req.body;
     const role = "client";
 
     const newUser = new userModel({
@@ -171,10 +171,10 @@ module.exports.createclient = async (req, res) => {
       email,
       password,
       role,
-      annonces:[]
+      annonces:[],
     // vehicules: [{ type: mongoose.Schema.Types.ObjectId, ref: 'vehicules' }],
      // فارغ عند الإنشاء
-
+phones, address 
     });
 
     await newUser.save();

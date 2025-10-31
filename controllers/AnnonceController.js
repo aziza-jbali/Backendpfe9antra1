@@ -25,7 +25,7 @@ exports.addAnnonce = async (req, res) => {
 
     // إضافة الصورة إذا موجودة
     if (req.file) {
-      data.image = `/uploads/annonces/${req.file.filename}`;
+      data.image = `/images/${req.file.filename}`;
     }
 
     // ربط الإعلان بالمعلن

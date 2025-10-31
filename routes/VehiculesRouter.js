@@ -16,7 +16,9 @@ router.get('/getVehicules', VehiculesController.getVehicules);
 
 //get vehicule by id
 router.get("/getvehiculesbyid/:id", VehiculesController.getVehiculeById);
+// get vehicule with details agence
 
+router.get('/getvehiculeswithagence', VehiculesController.getvehiculeswithagence);
 
 
 // delete vehicule by id and from its agence 

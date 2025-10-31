@@ -28,6 +28,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));//dosssier static tkolo rak bach tsta3mlo makench myfikich
+app.use('/images', express.static(path.join(__dirname, 'public/images')));
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
 // lhna 3ibra 3la guichet wala map t7eeb tmichi page user 3lik bl path hadha
 app.use('/', indexRouter);
