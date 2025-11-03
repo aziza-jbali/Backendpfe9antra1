@@ -69,7 +69,7 @@ const userSchema = new mongoose.Schema({
     default: 'client' 
   },
   // 📞 معلومات إضافية (لما يكمل الملف الشخصي)
-  phones: [{ type: String }],
+  phones: { type: String },
   address: { type: String },
   description: { type: String },
   // pour admin
@@ -117,6 +117,27 @@ userSchema.methods.comparePassword = async function (enteredPassword) {
 //     console.log('New user created: ', doc);
 //     next();
 // });
+// userSchema.statics.login=async function(email,password){
+//   const user=this.findOne({email});
+//   if (user){
+//     const auth= await bcrypt.compare(password,user.password);
+//     if (auth){
+//       return user;
+//     }throw Error("inccorect password");
+    
+//   }throw Error("inccorect email");
+// }
 
+userSchema.statics.login = async function (email, password) {
+  const user = await this.findOne({ email });
+  if (user) {
+    const auth = await bcrypt.compare(password, user.password);
+    if (auth) {
+      return user;
+    }
+    throw Error("incorrect password");
+  }
+  throw Error("incorrect email");
+};
 const User = mongoose.model('User', userSchema);
 module.exports = User;

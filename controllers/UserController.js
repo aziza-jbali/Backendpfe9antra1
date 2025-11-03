@@ -506,3 +506,33 @@ module.exports.updateUserById = async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 };
+
+// twa ba3ed el login bach ns3a3 el token ytkwen min tlatha 7ajet identif unique user date exprimé maxage w min net secret
+
+const jwt = require("jsonwebtoken");
+const maxxAge = 1*60;
+
+const createToken = (id) => {
+  return jwt.sign({ id },"catch me if you can", {
+    expiresIn: maxxAge,
+  });
+}
+
+
+
+module.exports.login= async (req,res)=>{
+  try{
+      const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
+    const user = await userModel.login(email, password);
+     const token = createToken(user._id);
+    console.log(token);
+      res.cookie("jwt", token, { httpOnly: true, maxAge: maxxAge * 1000 });
+
+    res.status(200).json({message:"login successful",user});
+  }catch (error) {
+  res.status(500).json({ message: error.message });
+}
+}

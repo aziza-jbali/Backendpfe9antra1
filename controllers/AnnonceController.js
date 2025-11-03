@@ -130,10 +130,10 @@ exports.updateAnnonce = async (req, res) => {
   }
 };
 // update the statue
-exports.updateStatutByAnnonceur = async (req, res) => {
+exports.updateStatutByAdmin = async (req, res) => {
   try {
     const { id } = req.params; // 🆔 رقم الإعلان
-    const { statut, annonceurId } = req.body; // id المعلن المرسل
+    const { statut, adminId } = req.body; // id المعلن المرسل
 
     // 🔹 التحقق أن المعلن موجود
     // const annonceur = await User.findById(annonceurId);
@@ -151,9 +151,12 @@ exports.updateStatutByAnnonceur = async (req, res) => {
 
     // 🔹 تحديث الإعلان مع التأكد أنه تابع لهذا المعلن
     const annonce = await Annonce.findOneAndUpdate(
-      { _id: id, idannouncer: annonceurId },
-      { statut },
-      { new: true }
+      // { _id: id, idannouncer: annonceurId },
+      // { statut },
+      // { new: true }
+       { _id: id },  // شرط صحيح
+    { statut },
+    { new: true }
     );
 
     if (!annonce) {
@@ -170,13 +173,13 @@ exports.updateStatutByAnnonceur = async (req, res) => {
   }
 };
 
-// get annonce with the details of annonceur
+// get annonce with the details of one annonceur
 exports.getAnnoncesOfAnnonceur = async (req, res) => {
   try {
     const { annonceurId } = req.params;
 
     const annonceur = await User.findById(annonceurId)
-      .select("nom prenom email role image")
+      .select("nom prenom email phones image")
       .populate({
         path: "annonces",          // الحقل array في User
         select: "description statut image datePublication"
@@ -194,6 +197,18 @@ exports.getAnnoncesOfAnnonceur = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// get all annonces with the details of annonceur 
+exports.getannonceswithannonceur = async (req, res) => {
+  try {
+    const allAnnonces = await Annonce.find()
+      .populate('idannouncer', 'nom prenom email phones image'); // فقط الحقول المطلوبة
+    res.json(allAnnonces);
+  } catch (err) {
+    res.status(500).json({ message: 'Erreur serveur', error: err });
+  }
+};
+
 
 
 

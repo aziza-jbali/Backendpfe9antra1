@@ -20,10 +20,12 @@ router.put(
 // update statut
 router.put(
   "/updateStatut/:id",
-  AnnonceController.updateStatutByAnnonceur
+  AnnonceController.updateStatutByAdmin
 );
 // get all the annonces with the details of annonceur 
 router.get("/annonceur/:annonceurId/annonces", AnnonceController.getAnnoncesOfAnnonceur);
+router.get('/getannonceswithannonceur', AnnonceController.getannonceswithannonceur);
+
 
 
 module.exports = router;

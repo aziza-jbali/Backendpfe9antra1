@@ -2,11 +2,13 @@ var express = require('express');
 var router = express.Router();
 const UserController=require("../controllers/UserController")
 const uploadfile = require('../middlewares/uploadfile');
-
+const {}=require("../middlewares/authMiddlewares") // n7athou fi les route eli tst7ak authentification
 /* GET users listing. */
 // router.get('/', function(req, res, next) {
 //   res.send('respond with a resource');
 // });
+// //router.use(requireAuthUser); si t7eeb t7ot el middle ware fi el route el kol
+
 ////create users
 router.post('/createAdmin', UserController.createAdminprincipal);
 router.post('/createagence', UserController.createagence);
@@ -45,5 +47,7 @@ router.put("/updateUserById/:id", uploadfile.single("image"), UserController.upd
 
 //fi routage 3ndna 4 protocol get delete put post
 
- 
+ // tow endpoint of login post 3la 5ater 3dit data email and password
+router.post('/login', UserController.login);
+
 module.exports = router;

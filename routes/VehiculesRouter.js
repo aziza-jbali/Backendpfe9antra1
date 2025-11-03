@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const VehiculesController=require("../controllers/VehiculesController")
 const uploadfile = require('../middlewares/uploadfile');
+const{requireAuthUser}=require("../middlewares/authMiddlewares");
 
 //add vehicule by image and relited it by its agence 
 //fi login tst7akha
@@ -18,7 +19,7 @@ router.get('/getVehicules', VehiculesController.getVehicules);
 router.get("/getvehiculesbyid/:id", VehiculesController.getVehiculeById);
 // get vehicule with details agence
 
-router.get('/getvehiculeswithagence', VehiculesController.getvehiculeswithagence);
+router.get('/getvehiculeswithagence', requireAuthUser,VehiculesController.getvehiculeswithagence);
 
 
 // delete vehicule by id and from its agence 
