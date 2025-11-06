@@ -48,6 +48,8 @@ router.put("/updateUserById/:id", uploadfile.single("image"), UserController.upd
 //fi routage 3ndna 4 protocol get delete put post
 
  // tow endpoint of login post 3la 5ater 3dit data email and password
-router.post('/login', UserController.login);
+router.post('/login', UserController.login);//login user
+router.get('/logout', UserController.logout);//logout 
+
 
 module.exports = router;

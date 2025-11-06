@@ -181,7 +181,7 @@ phones, address
 
     res.status(201).json({
       newUser,
-      message: "agence created successfully",
+      message: "client created successfully",
     });
 
   } catch (error) {
@@ -520,19 +520,62 @@ const createToken = (id) => {
 //cc
 
 
-module.exports.login= async (req,res)=>{
-  try{
-      const { email, password } = req.body;
+// module.exports.login= async (req,res)=>{
+//   try{
+//       const { email, password } = req.body;
+//     if (!email || !password) {
+//       return res.status(400).json({ message: "Email and password are required" });
+//     }
+//     const user = await userModel.login(email, password);
+//      const token = createToken(user._id);
+//     console.log(token);
+//       res.cookie("jwt", token, { httpOnly: true, maxAge: maxxAge * 1000 });
+
+//     res.status(200).json({message:"login successful",user});
+//   }catch (error) {
+//   res.status(500).json({ message: error.message });
+// }
+// }
+
+module.exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
     if (!email || !password) {
       return res.status(400).json({ message: "Email and password are required" });
     }
-    const user = await userModel.login(email, password);
-     const token = createToken(user._id);
-    console.log(token);
-      res.cookie("jwt", token, { httpOnly: true, maxAge: maxxAge * 1000 });
 
-    res.status(200).json({message:"login successful",user});
-  }catch (error) {
-  res.status(500).json({ message: error.message });
+    const user = await userModel.login(email, password);
+    const token = createToken(user._id);
+
+    // بدل وضعه في cookie فقط، أرسله أيضًا في الـ JSON
+    res.status(200).json({
+      message: "login successful",
+      user,
+      token, // هذا سيذهب إلى frontend
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+module.exports.logout = (req, res) => {// fi 3wedh ma3mel clear cookies just erod el date d expiration 1 second
+try {
+    //res.cookie("jwt", "", { maxAge: 1 });
+    res.clearCookie("jwt");
+    res.status(200).json({ message: "Logout successful" });
+} catch (error) {
+  res.status(500).json({ message: "Server error", error });
 }
 }
